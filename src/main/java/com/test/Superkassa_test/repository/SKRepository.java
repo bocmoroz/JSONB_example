@@ -9,5 +9,5 @@ import java.util.List;
 @Repository
 public interface SKRepository extends JpaRepository<SKEntity, Long> {
 
-    List<SKEntity> findProductById(Long id);
+    List<SKEntity> findEntityById(Long id);
 }

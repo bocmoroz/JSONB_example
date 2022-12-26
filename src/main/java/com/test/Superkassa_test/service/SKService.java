@@ -22,7 +22,7 @@ public class SKService {
 
     @Transactional
     public SKEntity modify(Long id, Double add) {
-        List<SKEntity> skEntities = skRepository.findProductById(id);
+        List<SKEntity> skEntities = skRepository.findEntityById(id);
         if (skEntities.isEmpty()) {
             throw new EntityValidationException("Энтити с id " + id + " не существует!");
         }

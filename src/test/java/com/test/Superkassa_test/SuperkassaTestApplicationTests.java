@@ -67,7 +67,7 @@ class SuperkassaTestApplicationTests {
         Long id = 1L;
         Double add = 56D;
 
-        Mockito.when(skRepository.findProductById(id)).thenReturn(Collections.singletonList(skEntity));
+        Mockito.when(skRepository.findEntityById(id)).thenReturn(Collections.singletonList(skEntity));
 
         UpdateRequestDto updateRequestDto = new UpdateRequestDto(id, add);
 
@@ -87,7 +87,7 @@ class SuperkassaTestApplicationTests {
         Long id = 1L;
         Double add = 56D;
 
-        Mockito.when(skRepository.findProductById(id)).thenThrow(new RuntimeException("Внутренняя ошибка"));
+        Mockito.when(skRepository.findEntityById(id)).thenThrow(new RuntimeException("Внутренняя ошибка"));
 
         UpdateRequestDto updateRequestDto = new UpdateRequestDto(id, add);
 
