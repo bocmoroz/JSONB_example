@@ -20,7 +20,7 @@ public class SKService {
         this.skRepository = skRepository;
     }
 
-    @Transactional
+    @Transactional(Transactional.TxType.REQUIRES_NEW)
     public SKEntity modify(Long id, Double add) {
         List<SKEntity> skEntities = skRepository.findEntityById(id);
         if (skEntities.isEmpty()) {

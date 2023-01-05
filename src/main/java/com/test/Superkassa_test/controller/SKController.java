@@ -7,11 +7,13 @@ import com.test.Superkassa_test.dto.UpdateRequestDto;
 import com.test.Superkassa_test.entity.SKEntity;
 import com.test.Superkassa_test.entity.SKObj;
 import com.test.Superkassa_test.exception.EntityValidationException;
+import com.test.Superkassa_test.service.IntermService;
 import com.test.Superkassa_test.service.SKService;
 import com.test.Superkassa_test.validation.EntityRequestValidationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.CannotCreateTransactionException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,11 +22,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class SKController {
 
     private final SKService skService;
+    private final IntermService intermService;
     private final EntityRequestValidationService requestValidationService;
 
     @Autowired
-    public SKController(SKService skService, EntityRequestValidationService requestValidationService) {
+    public SKController(SKService skService, IntermService intermService, EntityRequestValidationService requestValidationService) {
         this.skService = skService;
+        this.intermService = intermService;
         this.requestValidationService = requestValidationService;
     }
 
@@ -35,12 +39,16 @@ public class SKController {
 
         try {
             requestValidationService.validateEntityModifyRequest(updateRequestDto.getId(), updateRequestDto.getAdd());
-            SKEntity updatedSKEntity = skService.modify(updateRequestDto.getId(), updateRequestDto.getAdd());
+            SKEntity updatedSKEntity = intermService.modify(updateRequestDto.getId(), updateRequestDto.getAdd());
             SKEntityDto updatedSKEntityDto = SKEntityDto.create(updatedSKEntity);
-            responseDto = new ResponseDto<>(0, "Значение энтити успешно обновлено!", updatedSKEntityDto);
+            responseDto = new ResponseDto<>(0, "Значение энтити успешно обновлено1!", updatedSKEntityDto);
             return new ResponseEntity<>(responseDto, HttpStatus.OK);
         } catch (EntityValidationException e) {
             responseDto = new ResponseDto<>(1, e.getMessage(), null);
+            return new ResponseEntity<>(responseDto, HttpStatus.I_AM_A_TEAPOT);
+        } catch (CannotCreateTransactionException e) {
+            responseDto = new ResponseDto<>(1,
+                    "Превышено максимальное число одновременных запросов, повторите позже!", null);
             return new ResponseEntity<>(responseDto, HttpStatus.I_AM_A_TEAPOT);
         } catch (Exception e) {
             responseDto = new ResponseDto<>(2, "Внутренняя ошибка, энтити не обновлен!", null);
