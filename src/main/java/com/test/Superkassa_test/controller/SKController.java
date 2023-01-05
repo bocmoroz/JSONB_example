@@ -41,7 +41,7 @@ public class SKController {
             requestValidationService.validateEntityModifyRequest(updateRequestDto.getId(), updateRequestDto.getAdd());
             SKEntity updatedSKEntity = intermService.modify(updateRequestDto.getId(), updateRequestDto.getAdd());
             SKEntityDto updatedSKEntityDto = SKEntityDto.create(updatedSKEntity);
-            responseDto = new ResponseDto<>(0, "Значение энтити успешно обновлено1!", updatedSKEntityDto);
+            responseDto = new ResponseDto<>(0, "Значение энтити успешно обновлено!", updatedSKEntityDto);
             return new ResponseEntity<>(responseDto, HttpStatus.OK);
         } catch (EntityValidationException e) {
             responseDto = new ResponseDto<>(1, e.getMessage(), null);
