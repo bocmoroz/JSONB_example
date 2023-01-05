@@ -22,6 +22,9 @@ public class SKEntity {
     @Column(name = "obj", columnDefinition = "jsonb")
     private SKObj skObj;
 
+    @Version
+    private Long version;
+
     public SKEntity() {
     }
 
