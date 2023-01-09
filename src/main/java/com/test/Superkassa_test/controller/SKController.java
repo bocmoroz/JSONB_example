@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 
 @RestController
 public class SKController {
@@ -41,6 +42,9 @@ public class SKController {
             return new ResponseEntity<>(responseDto, HttpStatus.OK);
         } catch (EntityValidationException e) {
             responseDto = new ResponseDto<>(1, e.getMessage(), null);
+            return new ResponseEntity<>(responseDto, HttpStatus.I_AM_A_TEAPOT);
+        } catch (ObjectOptimisticLockingFailureException e) {
+            responseDto = new ResponseDto<>(1, "Значение энтити не обновлено, данные используются другим пользователем!", null);
             return new ResponseEntity<>(responseDto, HttpStatus.I_AM_A_TEAPOT);
         } catch (Exception e) {
             responseDto = new ResponseDto<>(2, "Внутренняя ошибка, энтити не обновлен!", null);
